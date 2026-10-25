@@ -1,48 +1,175 @@
+/* ===== 色やサイズの共通設定（ここを変えると全体の色味が変わる） ===== */
+:root {
+  --bg: #f7f8fa;          /* ページの背景 */
+  --surface: #ffffff;     /* カード・フォームの背景 */
+  --border: #e5e7eb;      /* 枠線 */
+  --text: #1f2937;        /* 文字 */
+  --text-sub: #6b7280;    /* 補足の文字 */
+  --primary: #4f46e5;     /* メインの色（ボタン・選択中など） */
+  --primary-soft: #eef2ff;/* メインの色の薄い版 */
+  --danger: #dc2626;      /* 削除・警告 */
+  --radius: 12px;         /* 角の丸み */
+  --shadow: 0 1px 2px rgba(16, 24, 40, .05), 0 1px 3px rgba(16, 24, 40, .08);
+}
+
+/* ===== 全体 ===== */
 * { box-sizing: border-box; }
 body {
   margin: 0;
-  font-family: system-ui, "Hiragino Sans", "Yu Gothic", sans-serif;
-  background: #f4f6f8;
-  color: #222;
+  font-family: "Inter", system-ui, "Hiragino Sans", "Yu Gothic UI", "Yu Gothic", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.6;
 }
-.center { text-align: center; margin-top: 4rem; }
+.container { max-width: 1200px; margin: 0 auto; padding: 24px 16px 48px; }
+.container.wide { max-width: 1600px; }
+.center { text-align: center; margin-top: 3rem; color: var(--text-sub); }
+.muted { color: var(--text-sub); font-size: .9rem; margin: 4px 0; }
+.error {
+  color: var(--danger); background: #fef2f2; border: 1px solid #fecaca;
+  border-radius: 8px; padding: 8px 12px; font-size: .9rem;
+}
 
-/* 認証画面 */
-.auth-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 16px; }
-.auth-form {
-  width: 100%; max-width: 380px; background: #fff; padding: 28px;
-  border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,.08);
-  display: flex; flex-direction: column; gap: 14px;
+/* ===== 上部のタイトルと画面切り替えボタン ===== */
+.page-header {
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
+  margin-bottom: 24px;
 }
-.auth-form h1 { margin: 0 0 4px; font-size: 1.4rem; }
-.auth-form label { display: flex; flex-direction: column; gap: 4px; font-size: .9rem; }
-input { padding: 10px; border: 1px solid #ccd; border-radius: 6px; font-size: 1rem; }
+.page-header h1 { margin: 0; font-size: 1.5rem; font-weight: 700; letter-spacing: .01em; }
+/* 画面切り替えはタブ型のボタン */
+.nav {
+  display: flex; gap: 4px; flex-wrap: wrap; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 999px; padding: 4px; box-shadow: var(--shadow);
+}
+.nav-btn {
+  color: var(--text-sub); text-decoration: none; font-size: .85rem; font-weight: 500;
+  padding: 6px 16px; border-radius: 999px; transition: background .15s, color .15s;
+}
+.nav-btn:hover { color: var(--text); background: #f3f4f6; }
+/* 表示中の画面のボタン */
+.nav-btn.active { background: var(--primary); color: #fff; }
+.now { margin: -12px 0 20px; font-size: .85rem; color: var(--text-sub); }
+
+/* ===== ボタン・入力欄 ===== */
 button {
-  padding: 10px 16px; border: none; border-radius: 6px; background: #2563eb;
-  color: #fff; font-size: 1rem; cursor: pointer;
+  padding: 8px 16px; border: 1px solid transparent; border-radius: 8px; background: var(--primary);
+  color: #fff; font-size: .9rem; font-weight: 500; cursor: pointer; transition: filter .15s, background .15s;
 }
-button:disabled { opacity: .6; cursor: not-allowed; }
-.error { color: #c0392b; font-size: .9rem; margin: 0; }
-.success { color: #1e8449; font-size: .9rem; margin: 0; }
+button:hover:not(:disabled) { filter: brightness(1.08); }
+button:disabled { opacity: .5; cursor: not-allowed; }
+button.secondary { background: var(--surface); color: var(--text); border-color: var(--border); }
+button.secondary:hover:not(:disabled) { background: #f9fafb; filter: none; }
+button.danger { background: var(--surface); color: var(--danger); border-color: #fecaca; }
+button.danger:hover:not(:disabled) { background: #fef2f2; filter: none; }
+input, select {
+  padding: 8px 10px; border: 1px solid #d1d5db; border-radius: 8px; font-size: .9rem;
+  background: var(--surface); color: var(--text); font-family: inherit;
+  transition: border-color .15s, box-shadow .15s;
+}
+/* 入力中の欄はメインの色で囲む */
+input:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
+input.readonly { background: #f3f4f6; color: var(--text-sub); }
 
-/* 物件一覧 */
-.container { max-width: 960px; margin: 0 auto; padding: 24px 16px; }
-.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 8px; }
-.header h1 { margin: 0; font-size: 1.5rem; }
-.header-right { display: flex; align-items: center; gap: 12px; }
-.user-email { font-size: .85rem; color: #555; }
-.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
-.card { background: #fff; border-radius: 10px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
-.card h2 { margin: 0 0 12px; font-size: 1.1rem; }
-.rent { margin: 0 0 6px; font-size: 1.2rem; font-weight: bold; color: #2563eb; }
-.area { margin: 0; color: #666; }
+/* ===== 登録・編集フォーム ===== */
+.form-title { margin: 0 0 10px; font-size: 1.05rem; font-weight: 600; }
+.edit-form {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 20px 24px; margin-bottom: 32px;
+}
+.form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 16px; margin-bottom: 16px; }
+.form-row label { display: flex; flex-direction: column; gap: 6px; font-size: .8rem; font-weight: 500; color: var(--text-sub); }
+.form-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+/* フォーム内の小見出し付きエリア（担当業務・メンバー一覧など） */
+.sub-section { background: #fafafa; border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; margin-bottom: 16px; }
+.sub-label { display: block; font-size: .85rem; font-weight: 600; margin-bottom: 8px; }
+.task-list { margin: 0; padding-left: 20px; }
+.list-table { border-collapse: collapse; min-width: 360px; background: var(--surface); border-radius: 8px; overflow: hidden; }
+.list-table th, .list-table td { border-bottom: 1px solid var(--border); padding: 8px 12px; text-align: left; font-size: .875rem; }
+.list-table th { background: #f3f4f6; font-weight: 500; color: var(--text-sub); font-size: .8rem; }
+.list-table tr:last-child td { border-bottom: none; }
 
-/* 物件の登録・編集フォーム */
-.property-form { background: #fff; border-radius: 10px; padding: 20px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
-.property-form h2 { margin: 0 0 12px; font-size: 1.1rem; }
-.form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
-.form-row label { display: flex; flex-direction: column; gap: 4px; font-size: .85rem; }
-.form-actions { margin-top: 14px; display: flex; gap: 8px; }
-.card-actions { margin-top: 14px; display: flex; gap: 8px; }
-button.secondary { background: #e5e7eb; color: #222; }
-button.danger { background: #dc2626; }
+/* 工程の入力表 */
+.phase-table-wrap { overflow-x: auto; }
+.phase-table { border-collapse: separate; border-spacing: 6px 6px; margin: -6px; }
+.phase-table th { font-weight: 500; font-size: .75rem; color: var(--text-sub); text-align: left; padding: 0 2px; }
+.phase-table td { padding: 0; }
+.phase-table td.phase-name { padding: 6px 12px; white-space: nowrap; font-size: .85rem; font-weight: 500; border-radius: 8px; }
+.phase-table input { width: 100%; min-width: 130px; }
+.phase-table input[type="number"] { min-width: 80px; text-align: right; }
+
+/* ===== カード ===== */
+.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
+.card {
+  background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 16px 18px; font-size: .85rem; text-align: left;
+  transition: box-shadow .15s, border-color .15s, transform .15s;
+}
+.card:hover { box-shadow: 0 4px 12px rgba(16, 24, 40, .1); }
+.card p { margin: 2px 0; color: var(--text-sub); }
+.card .card-title { font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+/* 選択中・編集中のカードはメインの色で囲む */
+.card.selected { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
+.card-actions { display: flex; gap: 8px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+.card-actions button { padding: 6px 14px; font-size: .8rem; }
+/* プロジェクト選択用のカード（ボタンとして押せる） */
+.card-button { font: inherit; cursor: pointer; }
+.card-button:hover { transform: translateY(-1px); filter: none; }
+.card p.overload { color: var(--danger); font-weight: 600; }
+
+/* 進捗率・負荷の横棒 */
+.progress { height: 6px; background: #eef0f3; border-radius: 999px; overflow: hidden; margin: 4px 0 8px; }
+.progress-fill { height: 100%; background: var(--primary); border-radius: 999px; transition: width .3s; }
+.progress-fill.over { background: var(--danger); }
+
+/* ===== ダッシュボードの各エリア ===== */
+.panel { margin-bottom: 32px; }
+.panel-title { margin: 0 0 10px; font-size: 1rem; font-weight: 600; }
+/* カードを横一列に並べ、はみ出した分は横スクロール */
+.scroll-row { display: flex; gap: 16px; overflow-x: auto; padding: 4px 4px 12px; align-items: stretch; }
+.scroll-row .card { flex: 0 0 250px; }
+
+/* ===== ガントチャート ===== */
+/* 画面の高さに収め、チャートの中でスクロールさせる（見出しを上部に固定するため） */
+.gantt {
+  overflow: auto; max-height: calc(100vh - 60px); background: var(--surface);
+  border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow);
+}
+.gantt-inner { width: max-content; font-size: .78rem; }
+.g-row { display: flex; }
+/* 見出し（目印と日付）は縦スクロールしても上部に固定 */
+.g-head { position: sticky; top: 0; z-index: 3; background: var(--surface); border-bottom: 1px solid var(--border); }
+.g-label-head { width: 160px; flex-shrink: 0; }
+.g-days { display: flex; }
+/* 開始日・納入日の目印（文字は列の幅からはみ出して表示） */
+.g-mark {
+  flex-shrink: 0; height: 24px; display: flex; justify-content: center; align-items: flex-end;
+  white-space: nowrap; overflow: visible; font-weight: 600; font-size: .72rem; color: var(--primary);
+}
+.g-day { text-align: center; padding: 4px 0 6px; flex-shrink: 0; color: var(--text-sub); }
+/* 今日の日付は丸で強調 */
+.g-day.today { color: #fff; background: var(--primary); border-radius: 6px; }
+/* 本体：列の背景を行の後ろに敷くため、基準位置にする */
+.g-body { position: relative; }
+.g-software-block { position: relative; z-index: 1; }
+/* 日付の列の背景（左のラベル160pxの右から敷く） */
+.g-columns { position: absolute; top: 0; bottom: 0; left: 160px; display: flex; }
+.g-col { flex-shrink: 0; border-right: 1px solid #f1f2f4; }
+.g-col.weekend { background: #f3f4f6; }  /* 土日：灰色 */
+.g-col.start { background: #fef9c3; }    /* 開始日：薄い黄色 */
+.g-col.delivery { background: #fae8ff; } /* 納入日：薄い紫 */
+/* ソフトの見出し行 */
+.g-software {
+  display: flex; gap: 20px; align-items: baseline; background: #f9fafb;
+  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 8px 12px; color: var(--text-sub);
+}
+.g-software strong { font-size: .9rem; font-weight: 600; color: var(--text); }
+/* 工程（工程名 + 予定行・実績行） */
+.g-phase { display: flex; border-bottom: 1px solid #f1f2f4; }
+.g-phase-name { width: 110px; flex-shrink: 0; padding: 6px 10px; font-weight: 500; }
+.g-kind { width: 50px; flex-shrink: 0; padding: 4px 8px; color: var(--text-sub); background: var(--surface); }
+/* バーを描く行（背景は透明にして、後ろの列の色を見せる） */
+.g-track { position: relative; height: 24px; }
+.g-bar { position: absolute; top: 6px; height: 12px; border-radius: 999px; }
+.g-bar.plan { background: #fcd34d; }   /* 予定：黄色 */
+.g-bar.actual { background: #f97316; } /* 実績：オレンジ */
