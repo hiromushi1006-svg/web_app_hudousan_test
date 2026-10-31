@@ -1,4 +1,5 @@
 /* ===== 色やサイズの共通設定（ここを変えると全体の色味が変わる） ===== */
+/* :root はページ全体のこと。ここで「--名前」の変数を定義し、下で var(--名前) として使う */
 :root {
   --bg: #f7f8fa;          /* ページの背景 */
   --surface: #ffffff;     /* カード・フォームの背景 */
@@ -9,59 +10,88 @@
   --primary-soft: #eef2ff;/* メインの色の薄い版 */
   --danger: #dc2626;      /* 削除・警告 */
   --radius: 12px;         /* 角の丸み */
+  /* 影（薄い影を2枚重ねて、自然な浮き上がりにする） */
   --shadow: 0 1px 2px rgba(16, 24, 40, .05), 0 1px 3px rgba(16, 24, 40, .08);
 }
 
 /* ===== 全体 ===== */
+/* すべての要素で、枠線と内側の余白を幅・高さに含めて計算する（レイアウトが崩れにくくなる） */
 * { box-sizing: border-box; }
+/* ページ全体の基本設定 */
 body {
+  /* ブラウザ標準の外側の余白を消す */
   margin: 0;
+  /* 使うフォント（左から順に、PCに入っているものを使う） */
   font-family: "Inter", system-ui, "Hiragino Sans", "Yu Gothic UI", "Yu Gothic", sans-serif;
+  /* 背景色 */
   background: var(--bg);
+  /* 文字色 */
   color: var(--text);
+  /* 基本の文字サイズ */
   font-size: 14px;
+  /* 行の高さ（文字サイズの1.6倍） */
   line-height: 1.6;
 }
+/* 各画面の外枠：最大幅1200pxで中央寄せし、周りに余白を取る */
 .container { max-width: 1200px; margin: 0 auto; padding: 24px 16px 48px; }
+/* ダッシュボード用に、最大幅を1600pxに広げる */
 .container.wide { max-width: 1600px; }
+/* 「読み込み中」などの文字を中央に寄せ、上に余白を空ける */
 .center { text-align: center; margin-top: 3rem; color: var(--text-sub); }
+/* 控えめな補足の文字（灰色・小さめ） */
 .muted { color: var(--text-sub); font-size: .9rem; margin: 4px 0; }
+/* エラーメッセージ：赤い文字を薄い赤の箱に入れる */
 .error {
   color: var(--danger); background: #fef2f2; border: 1px solid #fecaca;
   border-radius: 8px; padding: 8px 12px; font-size: .9rem;
 }
 
 /* ===== 上部のタイトルと画面切り替えボタン ===== */
+/* タイトルを左、画面切り替えボタンを右に配置する（狭い画面では折り返す） */
 .page-header {
   display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
   margin-bottom: 24px;
 }
+/* 画面のタイトル（大きめ・太字） */
 .page-header h1 { margin: 0; font-size: 1.5rem; font-weight: 700; letter-spacing: .01em; }
 /* 画面切り替えはタブ型のボタン */
+/* ボタンを横に並べ、全体を丸い白い枠で囲む（999px は「できるだけ丸く」の意味） */
 .nav {
   display: flex; gap: 4px; flex-wrap: wrap; background: var(--surface);
   border: 1px solid var(--border); border-radius: 999px; padding: 4px; box-shadow: var(--shadow);
 }
+/* 各ボタン：灰色の文字・下線なし・丸い形。色の変化をなめらかにする */
 .nav-btn {
   color: var(--text-sub); text-decoration: none; font-size: .85rem; font-weight: 500;
   padding: 6px 16px; border-radius: 999px; transition: background .15s, color .15s;
 }
+/* カーソルを乗せたとき：文字を濃く、背景を薄い灰色にする */
 .nav-btn:hover { color: var(--text); background: #f3f4f6; }
 /* 表示中の画面のボタン */
+/* メインの色で塗りつぶし、文字を白にする */
 .nav-btn.active { background: var(--primary); color: #fff; }
+/* 現在の日付の表示（上の余白を詰め、小さめの灰色の文字にする） */
 .now { margin: -12px 0 20px; font-size: .85rem; color: var(--text-sub); }
 
 /* ===== ボタン・入力欄 ===== */
+/* ボタンの基本：メインの色・白い文字・角丸。色の変化をなめらかにする */
 button {
   padding: 8px 16px; border: 1px solid transparent; border-radius: 8px; background: var(--primary);
   color: #fff; font-size: .9rem; font-weight: 500; cursor: pointer; transition: filter .15s, background .15s;
 }
+/* カーソルを乗せたとき（押せない状態を除く）：少し明るくする */
 button:hover:not(:disabled) { filter: brightness(1.08); }
+/* 押せない状態：薄くし、カーソルを禁止マークにする */
 button:disabled { opacity: .5; cursor: not-allowed; }
+/* 補助的なボタン（編集・キャンセル・ログアウト）：白地に枠線 */
 button.secondary { background: var(--surface); color: var(--text); border-color: var(--border); }
+/* 補助的なボタンにカーソルを乗せたとき：ごく薄い灰色にする */
 button.secondary:hover:not(:disabled) { background: #f9fafb; filter: none; }
+/* 削除ボタン：白地に赤い文字と薄い赤の枠線 */
 button.danger { background: var(--surface); color: var(--danger); border-color: #fecaca; }
+/* 削除ボタンにカーソルを乗せたとき：薄い赤の背景にする */
 button.danger:hover:not(:disabled) { background: #fef2f2; filter: none; }
+/* 入力欄とプルダウンの基本：灰色の枠・角丸。枠の色の変化をなめらかにする */
 input, select {
   padding: 8px 10px; border: 1px solid #d1d5db; border-radius: 8px; font-size: .9rem;
   background: var(--surface); color: var(--text); font-family: inherit;
@@ -69,64 +99,100 @@ input, select {
 }
 /* 入力中の欄はメインの色で囲む */
 input:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
+/* 入力できない欄（自動計算の表示など）：灰色の背景 */
 input.readonly { background: #f3f4f6; color: var(--text-sub); }
 
 /* ===== 登録・編集フォーム ===== */
+/* フォームの見出し */
 .form-title { margin: 0 0 10px; font-size: 1.05rem; font-weight: 600; }
+/* フォーム全体：白い箱・枠線・角丸・影 */
 .edit-form {
   background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
   box-shadow: var(--shadow); padding: 20px 24px; margin-bottom: 32px;
 }
+/* 入力欄を格子状に並べる（1つ170px以上の幅で、入るだけ横に並べる） */
 .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 16px; margin-bottom: 16px; }
+/* 項目名と入力欄を縦に並べる */
 .form-row label { display: flex; flex-direction: column; gap: 6px; font-size: .8rem; font-weight: 500; color: var(--text-sub); }
+/* 登録・キャンセルなどのボタンを横に並べる */
 .form-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 /* フォーム内の小見出し付きエリア（担当業務・メンバー一覧など） */
+/* ごく薄い灰色の箱で囲む */
 .sub-section { background: #fafafa; border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; margin-bottom: 16px; }
+/* エリアの小見出し */
 .sub-label { display: block; font-size: .85rem; font-weight: 600; margin-bottom: 8px; }
+/* 担当業務の箇条書き */
 .task-list { margin: 0; padding-left: 20px; }
+/* 一覧表：白い背景・角丸（はみ出した角は隠す） */
 .list-table { border-collapse: collapse; min-width: 360px; background: var(--surface); border-radius: 8px; overflow: hidden; }
+/* 表のマス：下線だけ引き、左寄せ */
 .list-table th, .list-table td { border-bottom: 1px solid var(--border); padding: 8px 12px; text-align: left; font-size: .875rem; }
+/* 表の見出しのマス：灰色の背景・小さめの文字 */
 .list-table th { background: #f3f4f6; font-weight: 500; color: var(--text-sub); font-size: .8rem; }
+/* 最後の行は下線を消す */
 .list-table tr:last-child td { border-bottom: none; }
 
 /* 工程の入力表 */
+/* 表が収まらないときは横スクロールさせる */
 .phase-table-wrap { overflow-x: auto; }
+/* マスとマスの間に6pxのすき間を空ける（外側のすき間はマイナスの余白で打ち消す） */
 .phase-table { border-collapse: separate; border-spacing: 6px 6px; margin: -6px; }
+/* 見出しのマス：小さめの灰色の文字 */
 .phase-table th { font-weight: 500; font-size: .75rem; color: var(--text-sub); text-align: left; padding: 0 2px; }
+/* 中身のマス：内側の余白なし */
 .phase-table td { padding: 0; }
+/* 工程名のマス：折り返さず、角丸にする（色は画面側で工程ごとに付ける） */
 .phase-table td.phase-name { padding: 6px 12px; white-space: nowrap; font-size: .85rem; font-weight: 500; border-radius: 8px; }
+/* 表の中の入力欄：マスいっぱいに広げ、最低130pxの幅にする */
 .phase-table input { width: 100%; min-width: 130px; }
+/* 進捗（数値）の入力欄：幅を狭くし、右寄せにする */
 .phase-table input[type="number"] { min-width: 80px; text-align: right; }
 
 /* ===== カード ===== */
+/* カードを格子状に並べる（1枚250px以上の幅で、入るだけ横に並べる） */
 .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
+/* カード：白い箱・枠線・角丸・影。影・枠・位置の変化をなめらかにする */
 .card {
   background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: var(--radius);
   box-shadow: var(--shadow); padding: 16px 18px; font-size: .85rem; text-align: left;
   transition: box-shadow .15s, border-color .15s, transform .15s;
 }
+/* カーソルを乗せたとき：影を濃くして浮き上がって見せる */
 .card:hover { box-shadow: 0 4px 12px rgba(16, 24, 40, .1); }
+/* カード内の各行：行間を詰め、灰色の文字にする */
 .card p { margin: 2px 0; color: var(--text-sub); }
+/* カードのタイトル（名前）：大きめ・太字・濃い文字 */
 .card .card-title { font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 6px; }
 /* 選択中・編集中のカードはメインの色で囲む */
 .card.selected { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
+/* 編集・削除ボタンのエリア：横に並べ、上に区切り線を引く */
 .card-actions { display: flex; gap: 8px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+/* カード内のボタンは小さめにする */
 .card-actions button { padding: 6px 14px; font-size: .8rem; }
 /* プロジェクト選択用のカード（ボタンとして押せる） */
+/* ボタン標準の文字設定を打ち消し、カードと同じ文字にする */
 .card-button { font: inherit; cursor: pointer; }
+/* カーソルを乗せたとき：1px上に浮かせる */
 .card-button:hover { transform: translateY(-1px); filter: none; }
+/* 負荷が100％を超えたときの文字：赤・太字 */
 .card p.overload { color: var(--danger); font-weight: 600; }
 
 /* 進捗率・負荷の横棒 */
+/* 棒の土台：細い灰色の帯（はみ出した中身は隠す） */
 .progress { height: 6px; background: #eef0f3; border-radius: 999px; overflow: hidden; margin: 4px 0 8px; }
+/* 棒の中身：メインの色。幅の変化をなめらかにする */
 .progress-fill { height: 100%; background: var(--primary); border-radius: 999px; transition: width .3s; }
+/* 100％を超えたとき：赤にする */
 .progress-fill.over { background: var(--danger); }
 
 /* ===== ダッシュボードの各エリア ===== */
+/* エリアどうしの間隔 */
 .panel { margin-bottom: 32px; }
+/* エリアの見出し */
 .panel-title { margin: 0 0 10px; font-size: 1rem; font-weight: 600; }
 /* カードを横一列に並べ、はみ出した分は横スクロール */
 .scroll-row { display: flex; gap: 16px; overflow-x: auto; padding: 4px 4px 12px; align-items: stretch; }
+/* 横一列の中のカードは、幅250pxで固定（縮めない） */
 .scroll-row .card { flex: 0 0 250px; }
 
 /* ===== ガントチャート ===== */
@@ -135,41 +201,202 @@ input.readonly { background: #f3f4f6; color: var(--text-sub); }
   overflow: auto; max-height: calc(100vh - 60px); background: var(--surface);
   border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow);
 }
+/* 中身の幅に合わせて横に広げる（日数が多いほど横長になる） */
 .gantt-inner { width: max-content; font-size: .78rem; }
+/* 1行分：中身を横に並べる */
 .g-row { display: flex; }
 /* 見出し（目印と日付）は縦スクロールしても上部に固定 */
 .g-head { position: sticky; top: 0; z-index: 3; background: var(--surface); border-bottom: 1px solid var(--border); }
+/* 見出しの左側の空白（工程名110px ＋ 予定/実績50px ＝ 160px） */
 .g-label-head { width: 160px; flex-shrink: 0; }
+/* 日付のマスを横に並べる */
 .g-days { display: flex; }
 /* 開始日・納入日の目印（文字は列の幅からはみ出して表示） */
 .g-mark {
   flex-shrink: 0; height: 24px; display: flex; justify-content: center; align-items: flex-end;
   white-space: nowrap; overflow: visible; font-weight: 600; font-size: .72rem; color: var(--primary);
 }
+/* 日付のマス：中央寄せ・灰色の文字（幅は画面側で指定） */
 .g-day { text-align: center; padding: 4px 0 6px; flex-shrink: 0; color: var(--text-sub); }
 /* 今日の日付は丸で強調 */
 .g-day.today { color: #fff; background: var(--primary); border-radius: 6px; }
 /* 本体：列の背景を行の後ろに敷くため、基準位置にする */
 .g-body { position: relative; }
+/* ソフトのブロック：列の背景より手前（z-index: 1）に表示する */
 .g-software-block { position: relative; z-index: 1; }
 /* 日付の列の背景（左のラベル160pxの右から敷く） */
 .g-columns { position: absolute; top: 0; bottom: 0; left: 160px; display: flex; }
+/* 1日分の列：右側に薄い区切り線 */
 .g-col { flex-shrink: 0; border-right: 1px solid #f1f2f4; }
 .g-col.weekend { background: #f3f4f6; }  /* 土日：灰色 */
 .g-col.start { background: #fef9c3; }    /* 開始日：薄い黄色 */
 .g-col.delivery { background: #fae8ff; } /* 納入日：薄い紫 */
 /* ソフトの見出し行 */
+/* 項目を横に並べ、ごく薄い灰色の帯にする（上下に線） */
 .g-software {
   display: flex; gap: 20px; align-items: baseline; background: #f9fafb;
   border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 8px 12px; color: var(--text-sub);
 }
+/* ソフト名：太字・濃い文字 */
 .g-software strong { font-size: .9rem; font-weight: 600; color: var(--text); }
 /* 工程（工程名 + 予定行・実績行） */
+/* 工程名と2行を横に並べ、下に薄い区切り線 */
 .g-phase { display: flex; border-bottom: 1px solid #f1f2f4; }
+/* 工程名の列：幅110px（色は画面側で工程ごとに付ける） */
 .g-phase-name { width: 110px; flex-shrink: 0; padding: 6px 10px; font-weight: 500; }
+/* 「予定」「実績」の列：幅50px・白い背景 */
 .g-kind { width: 50px; flex-shrink: 0; padding: 4px 8px; color: var(--text-sub); background: var(--surface); }
 /* バーを描く行（背景は透明にして、後ろの列の色を見せる） */
 .g-track { position: relative; height: 24px; }
+/* バー：行の中で位置を自由に決められるようにし、丸い細長い形にする（位置と幅は画面側で計算） */
 .g-bar { position: absolute; top: 6px; height: 12px; border-radius: 999px; }
 .g-bar.plan { background: #fcd34d; }   /* 予定：黄色 */
 .g-bar.actual { background: #f97316; } /* 実績：オレンジ */
+
+/* ===== ログイン・会員登録画面 ===== */
+/* 画面全体の高さで、フォームを上下左右の中央に配置する */
+.auth-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 16px; }
+/* フォーム：最大幅380pxの白い箱。中の項目を縦に並べる */
+.auth-form {
+  width: 100%; max-width: 380px; background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); box-shadow: var(--shadow); padding: 32px 28px;
+  display: flex; flex-direction: column; gap: 16px;
+}
+/* 「ログイン」「会員登録」の見出し */
+.auth-form h1 { margin: 0 0 4px; font-size: 1.4rem; font-weight: 700; }
+/* 項目名と入力欄を縦に並べる */
+.auth-form label { display: flex; flex-direction: column; gap: 6px; font-size: .8rem; font-weight: 500; color: var(--text-sub); }
+/* 送信ボタンを少し大きくする */
+.auth-form button { padding: 10px; }
+/* 案内の文字（「アカウントをお持ちでない方は」など） */
+.auth-form p { margin: 0; font-size: .85rem; color: var(--text-sub); }
+/* リンクの文字をメインの色にする */
+.auth-form a { color: var(--primary); }
+/* フォーム内のエラーは余白なし（間隔はフォームの gap で取る） */
+.auth-form .error { margin: 0; }
+/* 成功メッセージ：緑の文字を薄い緑の箱に入れる */
+.success {
+  color: #15803d; background: #f0fdf4; border: 1px solid #bbf7d0;
+  border-radius: 8px; padding: 8px 12px; font-size: .9rem; margin: 0;
+}
+
+/* ===== 上部のログイン中ユーザー・ログアウト ===== */
+/* メールアドレスとログアウトボタンを右寄せで横に並べる */
+.user-bar { display: flex; justify-content: flex-end; align-items: center; gap: 12px; margin-bottom: 8px; }
+/* ログイン中のメールアドレス（小さめ・灰色） */
+.user-email { font-size: .85rem; color: var(--text-sub); }
+/* ログアウトボタンを小さめにする */
+.user-bar button { padding: 4px 12px; font-size: .8rem; }
+
+/* ===== タスク画面 ===== */
+/* 「タスク内容」の項目名と複数行の入力欄を縦に並べる */
+.textarea-label { display: flex; flex-direction: column; gap: 6px; font-size: .8rem; font-weight: 500; color: var(--text-sub); margin-bottom: 16px; }
+/* 複数行の入力欄：入力欄と同じ見た目にし、縦方向だけ大きさを変えられるようにする */
+textarea {
+  padding: 8px 10px; border: 1px solid #d1d5db; border-radius: 8px; font-size: .9rem;
+  background: var(--surface); color: var(--text); font-family: inherit; resize: vertical;
+}
+/* 入力中はメインの色で囲む */
+textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
+
+/* ===== メンバーのガントチャート ===== */
+/* 1行分：下に薄い区切り線 */
+.g-item { border-bottom: 1px solid #f1f2f4; }
+/* 左側のラベル：幅160px（列の背景の開始位置と合わせる）、左端に種類ごとの色の帯 */
+.g-item-name {
+  width: 160px; flex-shrink: 0; padding: 8px 10px; font-weight: 500; background: var(--surface);
+  border-left: 4px solid transparent; display: flex; flex-direction: column; justify-content: center; line-height: 1.3;
+}
+.g-item-name.software { border-left-color: #6366f1; } /* ソフト：インディゴの帯 */
+.g-item-name.task { border-left-color: #f59e0b; }     /* タスク：オレンジの帯 */
+/* 「ソフト」「タスク」の小さな札 */
+.g-item-tag { font-size: .65rem; color: var(--text-sub); font-weight: 400; }
+/* バーを描く行を高めにする（進捗の数字を入れるため） */
+.g-track.tall { height: 44px; }
+/* 進捗入りのバーの土台（期間全体）：薄い色・角丸、はみ出した塗りは隠す */
+.g-pbar { position: absolute; top: 10px; height: 24px; border-radius: 6px; overflow: hidden; }
+.g-pbar.software { background: #e0e7ff; } /* ソフト：薄いインディゴ */
+.g-pbar.task { background: #fef3c7; }     /* タスク：薄いオレンジ */
+/* 進捗の分だけ塗る部分（左端から、幅は画面側で進捗％に合わせる） */
+.g-pbar-fill { position: absolute; top: 0; left: 0; bottom: 0; }
+.g-pbar.software .g-pbar-fill { background: #a5b4fc; } /* ソフト：インディゴ（数字が読めるよう明るめ） */
+.g-pbar.task .g-pbar-fill { background: #fcd34d; }     /* タスク：オレンジ（数字が読めるよう明るめ） */
+/* 進捗の数字：塗りの上に重ねて、左寄せで表示 */
+.g-pbar-label {
+  position: relative; display: block; padding: 0 8px; line-height: 24px;
+  font-size: .75rem; font-weight: 600; color: var(--text); white-space: nowrap;
+}
+/* 日付が未設定のときの案内 */
+.g-nodate { position: absolute; left: 8px; top: 12px; font-size: .75rem; color: var(--text-sub); }
+
+/* ===== ダッシュボードの「全プロジェクト」カード ===== */
+/* 個別のプロジェクトと区別するため、薄いメインの色の背景と点線の枠にする */
+.card.all-card { background: var(--primary-soft); border-style: dashed; }
+
+/* ===== 期日アラート ===== */
+/* アラートが0件のときの表示：薄い緑の箱 */
+.alert-empty {
+  margin: 0; padding: 10px 14px; border-radius: 10px; font-size: .85rem;
+  color: #15803d; background: #f0fdf4; border: 1px solid #bbf7d0;
+}
+/* アラートの一覧：箇条書きの点を消し、行を縦に並べる */
+.alert-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+/* 1件分：札・プロジェクト名・詳細を横に並べ、左端に色の帯を付ける */
+.alert-item {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 10px 14px;
+  background: var(--surface); border: 1px solid var(--border); border-left-width: 4px; border-radius: 10px;
+  box-shadow: var(--shadow); font-size: .875rem;
+}
+.alert-item.overdue { border-left-color: var(--danger); } /* 期日超過：赤の帯 */
+.alert-item.soon { border-left-color: #f59e0b; }          /* 間近：オレンジの帯 */
+/* 残り日数の札：丸い形・太字 */
+.alert-badge { padding: 2px 10px; border-radius: 999px; font-size: .75rem; font-weight: 600; white-space: nowrap; }
+.alert-item.overdue .alert-badge { background: #fef2f2; color: var(--danger); } /* 期日超過：赤 */
+.alert-item.soon .alert-badge { background: #fef3c7; color: #b45309; }         /* 間近：オレンジ */
+/* 何の期日かと日付（灰色の文字） */
+.alert-detail { color: var(--text-sub); }
+/* 種類（プロジェクト・ソフト・タスク）の札：小さめの角丸 */
+.alert-type { padding: 1px 8px; border-radius: 6px; font-size: .7rem; font-weight: 500; white-space: nowrap; }
+.alert-type.project { background: var(--primary-soft); color: var(--primary); } /* プロジェクト：インディゴ */
+.alert-type.software { background: #e0f2fe; color: #0369a1; }                  /* ソフト：水色 */
+.alert-type.task { background: #fef3c7; color: #b45309; }                      /* タスク：オレンジ */
+/* 補足（所属プロジェクト・担当者）：右端に寄せた小さめの灰色の文字 */
+.alert-sub { margin-left: auto; font-size: .8rem; color: var(--text-sub); }
+
+/* ===== ヘルプ画面 ===== */
+/* 本文全体：白いカードにし、読みやすい幅（最大860px）に収める */
+.help {
+  max-width: 860px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 28px 32px; line-height: 1.8;
+}
+/* 冒頭の紹介文：少し大きめ */
+.help-lead { font-size: 1rem; margin-top: 0; }
+/* 目次：薄い灰色の箱 */
+.help-toc { background: #f9fafb; border: 1px solid var(--border); border-radius: 10px; padding: 12px 20px; margin: 20px 0 8px; }
+/* 目次の見出し */
+.help-toc-title { margin: 0 0 4px; font-weight: 600; }
+/* 目次の一覧：余白を詰める */
+.help-toc ol { margin: 0; padding-left: 20px; }
+/* リンクの文字をメインの色にする（下線なし、カーソルを乗せたら下線） */
+.help a { color: var(--primary); text-decoration: none; }
+.help a:hover { text-decoration: underline; }
+/* 各章：上に区切り線と余白。目次から移動したとき見出しが上端に隠れないよう余白を取る */
+.help section { border-top: 1px solid var(--border); margin-top: 28px; padding-top: 8px; scroll-margin-top: 16px; }
+/* 章の見出し */
+.help h2 { font-size: 1.15rem; margin: 16px 0 8px; }
+/* 小見出し */
+.help h3 { font-size: 1rem; margin: 20px 0 6px; }
+/* 箇条書き：行間を少し空ける */
+.help ul, .help-steps { padding-left: 22px; }
+.help li { margin: 4px 0; }
+/* 用語と説明の一覧：用語は太字、説明は字下げ */
+.help-dl dt { font-weight: 600; margin-top: 12px; }
+.help-dl dd { margin: 2px 0 0 1em; color: var(--text-sub); }
+/* 補足：薄いメインの色の箱 */
+.help-note { background: var(--primary-soft); border-radius: 8px; padding: 10px 14px; font-size: .875rem; }
+/* 工程・フェーズの札を横に並べる */
+.help-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+/* 札1つ分（背景色は画面側で工程・フェーズごとに付ける） */
+.help-chip { padding: 2px 10px; border-radius: 999px; font-size: .8rem; }
+/* 計算ルールの表：横幅いっぱいに広げる */
+.help-table { width: 100%; }
