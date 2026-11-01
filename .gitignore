@@ -1,7 +1,6 @@
 node_modules
 dist
 .env
-CLAUDE.md
 .env.local
 *.log
 __pycache__/
